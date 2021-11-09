@@ -30,7 +30,7 @@ namespace Curiosity.SPSS.DataReader
 	        Stream output, 
 	        ICollection<Variable> variables,
 	        SpssOptions? options = null,
-	        bool leaveOpen = true)
+	        bool leaveOpen = false)
 			: this(
 				new SavFileWriter(output, leaveOpen),
 				variables,
