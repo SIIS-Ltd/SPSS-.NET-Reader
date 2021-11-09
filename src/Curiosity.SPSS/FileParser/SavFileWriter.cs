@@ -17,15 +17,15 @@ namespace Curiosity.SPSS.FileParser
 		private long _bias;
 		private bool _compress;
 	    private SpssOptions _options;
-        private readonly bool _disposeStream;
+        private readonly bool _leaveOpen;
 
         private StringWriter _stringWriter;
          
-		public SavFileWriter(Stream output, bool disposeStream = true)
+		public SavFileWriter(Stream output, bool leaveOpen = false)
 		{
 			_output = output;
-            _disposeStream = disposeStream;
-			_writer = new BinaryWriter(_output, Constants.BaseEncoding);
+            _leaveOpen = leaveOpen;
+			_writer = new BinaryWriter(_output, Constants.BaseEncoding, leaveOpen);
 		}
 		 
 	    public void WriteFileHeader(SpssOptions options, IEnumerable<Variable> variables)
@@ -173,13 +173,13 @@ namespace Curiosity.SPSS.FileParser
 
 			_output.Flush();
 
-            if (_disposeStream)
+            if (!_leaveOpen)
             {
                 _output.Dispose();
             }
 		}
 
-		public void WriteRecord(object[] record)
+	    public void WriteRecord(object[] record)
 		{
 			if (_recordWriter == null)
 			{
