@@ -9,7 +9,7 @@ Install-Package Curiosity.SPSS
 It's a fork of [SPSS-.NET-Reader](https://github.com/fbiagi/SPSS-.NET-Reader) by fbiagi (based on [spsslib-80132](http://spsslib.codeplex.com/) by elmarj). 
 Since forking we have added writing ability, solved many bugs, provided closer SPSS binary integration by following the [PSPP provided SPSS format](https://www.gnu.org/software/pspp/pspp-dev/html_node/System-File-Format.html#System-File-Format). 
 
-This library has been tested in production on a few large deployments at @SIIS-Ltd.
+This library has been tested in production at @SIIS-Ltd, but mostly for write scenarios.
 
 ### To read a data file:
 
@@ -19,35 +19,36 @@ using (FileStream fileStream = new FileStream("data.sav", FileMode.Open, FileAcc
                                               FileOptions.SequentialScan))
 {
     // Create the reader, this will read the file header
-    SpssReader spssDataset = new SpssReader(fileStream);
-    
-    // Iterate through all the varaibles
-    foreach (var variable in spssDataset.Variables)
+    using (SpssReader spssDataset = new SpssReader(fileStream))
     {
-        // Display name and label
-        Console.WriteLine("{0} - {1}", variable.Name, variable.Label);
-        // Display value-labels collection
-        foreach (KeyValuePair<double, string> label in variable.ValueLabels)
-        {
-            Console.WriteLine(" {0} - {1}", label.Key, label.Value);
-        }
-    }
-    
-    // Iterate through all data rows in the file
-    foreach (var record in spssDataset.Records)
-    {
+        // Iterate through all the varaibles
         foreach (var variable in spssDataset.Variables)
         {
-            Console.Write(variable.Name);
-            Console.Write(':');
-            // Use the corresponding variable object to get the values.
-            Console.Write(record.GetValue(variable));
-            // This will get the missing values as null, text with out extra spaces,
-            // and date values as DateTime.
-            // For original values, use record[variable] or record[int]
-            Console.Write('\t');
+            // Display name and label
+            Console.WriteLine("{0} - {1}", variable.Name, variable.Label);
+            // Display value-labels collection
+            foreach (KeyValuePair<double, string> label in variable.ValueLabels)
+            {
+                Console.WriteLine(" {0} - {1}", label.Key, label.Value);
+            }
         }
-        Console.WriteLine("");
+        
+        // Iterate through all data rows in the file
+        foreach (var record in spssDataset.Records)
+        {
+            foreach (var variable in spssDataset.Variables)
+            {
+                Console.Write(variable.Name);
+                Console.Write(':');
+                // Use the corresponding variable object to get the values.
+                Console.Write(record.GetValue(variable));
+                // This will get the missing values as null, text with out extra spaces,
+                // and date values as DateTime.
+                // For original values, use record[variable] or record[int]
+                Console.Write('\t');
+            }
+            Console.WriteLine("");
+        }
     }
 }
 ```
