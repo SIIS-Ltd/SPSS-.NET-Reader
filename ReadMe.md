@@ -14,7 +14,7 @@ This library has been tested in production at @SIIS-Ltd, but mostly for write sc
 ### To read a data file:
 
 ```C#
-// Open file, can be read only and sequetial (for performance), or anything else
+// Open file, can be read only and sequential (for performance), or anything else
 using (FileStream fileStream = new FileStream("data.sav", FileMode.Open, FileAccess.Read, FileShare.Read, 2048*10, 
                                               FileOptions.SequentialScan))
 {
