@@ -9,7 +9,7 @@ namespace Curiosity.SPSS.FileParser.Records
     internal static class EncodingExtensions
     {
         /// <summary>
-        /// Gets a decoded string, with trailing spaces trimmed out
+        /// Gets a decoded string, with trailing spaces and null characters trimmed out
         /// </summary>
         internal static string GetTrimmed(this Encoding enc, byte[] arr)
         {
@@ -23,7 +23,7 @@ namespace Curiosity.SPSS.FileParser.Records
                 throw new ArgumentNullException(nameof(arr));
             }
 
-            return enc.GetString(arr).TrimEnd();
+            return enc.GetString(arr).TrimEnd('\0').TrimEnd();
         }
 
 
