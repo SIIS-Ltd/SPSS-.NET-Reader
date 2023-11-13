@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.2] - 2023-11-13
+
+### Fixed
+
+- #2: Fixed incorrect variable name trimming: added removing of `\0` special character.
+
 ## [1.2.1] - 2021-11-09
 
 ### Added
